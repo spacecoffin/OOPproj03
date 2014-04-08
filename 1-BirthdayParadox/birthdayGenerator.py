@@ -7,7 +7,7 @@ class RandomBirthday:
         self.month = ''
         self.day = 1
     
-    def __next__(self):
+    def generate(self):
         random_int = choice(range(1, 365))
         if random_int < 32:
             self.month = 'jan'
@@ -46,8 +46,19 @@ class RandomBirthday:
             self.month = 'dec'
             self.day = random_int - 334
         self.birthday = (self.month, self.day)
-        print(random_int)
         return self.birthday
+    
+    def __next__(self, number=2):
+        if isinstance(number, int):
+            print("Met condition with number {}".format(number))
+            self.birthday_list = []
+            for i in range(number):
+                self.birthday_list.append(self.generate())
+                return self.birthday_list
+        else:
+            self.birthday = self.generate()
+            print(random_int)
+            return self.birthday
     
     def __iter__(self):
         return self
@@ -59,3 +70,6 @@ if __name__ == '__main__':
            print (birthday)
         else:
             break
+    print ('********************************')
+    print ('Three random birthdays:  ', next(bday,3))
+    print ('********************************')
