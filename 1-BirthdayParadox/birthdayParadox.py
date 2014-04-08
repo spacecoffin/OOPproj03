@@ -1,4 +1,8 @@
+from birthdayGenerator import RandomBirthday
+
 class BirthdayParadox:
+    # The BirthdayParadox class is designed to illustrate the paradox.
+    # The class BirthdayParadox uses RandomBirthday!
     def __init__(self):
         pass
     
