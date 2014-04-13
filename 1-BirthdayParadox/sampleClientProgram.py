@@ -8,10 +8,7 @@ def main():
            print (birthday)
         else:
             break
-    print ('********************************')
-    print ('Three random birthdays:  ', next(bday,3))
-    print ('********************************')
-    
+
     paradox = BirthdayParadox()
     paradox.distribution(28).display()
     print ('********************************')
