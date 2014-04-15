@@ -4,18 +4,40 @@ class BirthdayParadox:
     # The BirthdayParadox class is designed to illustrate the paradox.
     # The class BirthdayParadox uses RandomBirthday!
     def __init__(self):
-        pass
+        self.runList = []
+        self.shares = 0
     
-    def countShareBday(self):
+    def countShareBday(self, people, runs=10000):
         # performs number of runs as specified by the input. In each run
         # it "chooses people" (as many as specified in the input)
         # uniformly at random. It returns the number of runs in which
         # some pair of people share the same birthday.
-        pass
+        
+        # print ("""In {0} out of 10000 runs some pair out of 15 people
+        # (randomly chosen in each run) shared the same birthday""".format\
+        # (paradox.countShareBday(15)))"""
+        
+        j = 0
+        bday = RandomBirthday()
+        while j < runs:
+            for i,birthday in enumerate(bday):
+                if i < people:
+                    if birthday in self.runList:
+                        self.shares += 1
+                        break
+                    else:
+                        self.runList.append(birthday)
+                        continue
+                else:
+                    self.runList = []
+                    j += 1
+                    break
+        return self.shares
   
-    def distribution(self):
+    def distribution(self, number):
         # notes the different birthdays of randomly chosen people, as
         # many as specified by the input to the method.
+        
         pass
 
     def display(self):
@@ -32,4 +54,8 @@ class BirthdayParadox:
         pass
 
 if __name__ == '__main__':
-    pass
+    paradox = BirthdayParadox()
+    print ("""In {0} out of 10000 runs some pair out of 15 people
+       (randomly chosen in each run) shared the same birthday""".format\
+       (paradox.countShareBday(15)))
+    print ('********************************')

@@ -22,3 +22,5 @@ def main():
     print ('********************************')
     print()
     paradox.tabulate((33,36),2000)
+    
+main()

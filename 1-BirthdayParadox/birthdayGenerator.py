@@ -1,5 +1,7 @@
 from random import choice
 
+# you wrote this as an iterator, not a generator you fucking idiot.
+
 class RandomBirthday:
     # RandomBirthday generates birthdays uniformly at random for
     # non-leap years.
@@ -46,7 +48,7 @@ class RandomBirthday:
             self.month = 'dec'
             self.day = random_int - 334
         self.birthday = (self.month, self.day)
-        print(random_int)
+        # print(random_int)
         return self.birthday
     
     def __iter__(self):
