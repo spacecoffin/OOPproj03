@@ -43,92 +43,36 @@ class BirthdayParadox:
         for i in range(number_of_bdays):
             self.bday.__next__()
             self.bday_list.append(self.bday.birthday)
-        return sorted(self.bday_list)
-    
-        """
-        # NOTE TO SELF: Should this method not operate on the shared
-        # bday_list?
-        self.bday_list = []
-        for i in range(number_of_bdays):
-            self.bday.__next__()
-            self.bday_list.append(self.bday.birthday)
-        return self.bday_list
-        """
+        self.bday_list.sort()
+        return self
 
     def display(self):
         # outputs the birth dates of the chosen people with the number
         # of people born on each date shown in parenthesis.
         
-        #G = [[randrange(2) for i in range(n)] for i in range(n)]
+        bday_dict = {}
+        month_list = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
+                      'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        for month in month_list:
+            bday_dict[month] = []
         
-        #for birthday in self.bday_list
-        """
-        # NOTE TO SELF: This should probably be done as a dict shouldn't it?
-        if isinstance(list_to_format, list):
-            jan_list = []
-            feb_list = []
-            mar_list = []
-            apr_list = []
-            may_list = []
-            jun_list = []
-            jul_list = []
-            aug_list = []
-            sep_list = []
-            oct_list = []
-            nov_list = []
-            dec_list = []
-            bday_matrix = []
-            for birthday_tuple in list_to_format:
-                if birthday_tuple[0] is 'jan':
-                    jan_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'feb':
-                    feb_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'mar':
-                    mar_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'apr':
-                    apr_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'may':
-                    may_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'jun':
-                    jun_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'jul':
-                    jul_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'aug':
-                    aug_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'sep':
-                    sep_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'oct':
-                    oct_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'nov':
-                    nov_list.append(birthday_tuple[1])
-                    continue
-                elif birthday_tuple[0] is 'dec':
-                    dec_list.append(birthday_tuple[1])
-                    continue
-            bday_matrix.append(sorted(jan_list))
-            bday_matrix.append(sorted(feb_list))
-            bday_matrix.append(sorted(mar_list))
-            bday_matrix.append(sorted(apr_list))
-            bday_matrix.append(sorted(may_list))
-            bday_matrix.append(sorted(jun_list))
-            bday_matrix.append(sorted(jul_list))
-            bday_matrix.append(sorted(aug_list))
-            bday_matrix.append(sorted(sep_list))
-            bday_matrix.append(sorted(oct_list))
-            bday_matrix.append(sorted(nov_list))
-            bday_matrix.append(sorted(dec_list))
-        """    
-        pass
+        for bday in self.bday_list:
+            bday_dict[bday[0]].append(bday[1])
+        
+        for month in month_list:
+            print("{}".format(month.capitalize()), end=' ')
+            
+            for day in range(1, 32):
+                if day in bday_dict[month]:
+                    print("{}({})".format(
+                        day, bday_dict[month].count(day)), end=' ')
+            """
+            for day in bday_dict[month]:
+                print("{}({})".format(
+                    day, bday_dict[month].count(day)), end=' ')
+            """
+                
+            print()
 
     def tabulate(self, interval, runs=10000):
         # outputs a table with each row containing the number of people,
@@ -156,9 +100,23 @@ class BirthdayParadox:
                 people, ' '*10, self.shares, runs, self.shares/runs))
 
 if __name__ == '__main__':
+    bday = RandomBirthday()
+    for i,birthday in enumerate(bday):
+        if i <= 5:
+           print (birthday)
+        else:
+            break
+
     paradox = BirthdayParadox()
-    # print(paradox.distribution(15))
-    paradox.tabulate((30, 35), 2000)
+    paradox.distribution(50).display()
+    print ('********************************')
+    
+    print ("In {0} out of 10000 runs some pair out of 15 people"
+           "(randomly chosen in each run) shared the same birthday".format\
+           (paradox.countShareBday(15)))
+    print ('********************************')
+    
+    paradox.tabulate((10,15))
     print ('********************************')
     print()
-    paradox.tabulate(13)    
+    paradox.tabulate((33,36),2000)
