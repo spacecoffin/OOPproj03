@@ -13,8 +13,8 @@ def main():
     paradox.distribution(28).display()
     print ('********************************')
     
-    print ("""In {0} out of 10000 runs some pair out of 15 people
-           (randomly chosen in each run) shared the same birthday""".format\
+    print ("In {0} out of 10000 runs some pair out of 15 people"
+           "(randomly chosen in each run) shared the same birthday".format\
            (paradox.countShareBday(15)))
     print ('********************************')
     
