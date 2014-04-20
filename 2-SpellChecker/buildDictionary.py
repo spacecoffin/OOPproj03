@@ -30,22 +30,25 @@ def buildDictionary (fNames):
                     if not aword.istitle():
                         if aword.lower() not in dictionary:
                             dictionary.append(aword.lower())
-                    else: # debugging tool
-                        print("{} not added bc capitalized".format(aword))
+                    elif period_flag:
+                        print("{}: capitalized but begins".format(aword))
+                        if aword.lower() not in dictionary:
+                            dictionary.append(aword.lower())
+                    else:
+                        print("\t{} not added bc capitalized".format(aword))
                     wordch = []
-                    
-                    """
-                    if not period_flag:
-                        wordch = []
-                    """
-                    
+                    period_flag = False
+                    if not char.isspace():
+                        if char is '.':        # check for end of sentence
+                            period_flag = True
+                        else:
+                            period_flag = False
                 else:
-                    """
-                    if char is '.':        # check for end of sentence
-                        period_flag = True
-                    elif not char.isspace():
-                        period_flag = False
-                    """
+                    if not char.isspace():
+                        if char is '.':        # check for end of sentence
+                            period_flag = True
+                        else:
+                            period_flag = False
                     wordch = []
         finally:
             file.close()
