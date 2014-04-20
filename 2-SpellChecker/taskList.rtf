@@ -32,8 +32,13 @@
 \f2\i Capitalized = first letter is upper case and the rest of the 		   letters are lower case\
 		
 \f0\i0 c) 
-\f2\i A word is said to begin a sentence, if the non-whitespace character 		   immediately preceding the first letter of the word is a period.
-\f0\i0 \
+\f2\i A word is said to begin a sentence if the non-whitespace character 		   immediately preceding the first letter of the word is a period.\
+		
+\f0\i0 To implement:\
+			i) Create a "period flag"\
+				if char == .: set True\
+				set to False after the next loop branch that could write\
+					a word to the dictionary\
 	\cb5 2)\cb1  Figure out a simple and clean scheme to deal with apostrophes.\
 		a) 
 \f2\i "I\'92ll" and "could've" should be considered correctly spelled.
