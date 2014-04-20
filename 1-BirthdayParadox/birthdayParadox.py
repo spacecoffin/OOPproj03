@@ -65,13 +65,7 @@ class BirthdayParadox:
             for day in range(1, 32):
                 if day in bday_dict[month]:
                     print("{}({})".format(
-                        day, bday_dict[month].count(day)), end=' ')
-            """
-            for day in bday_dict[month]:
-                print("{}({})".format(
-                    day, bday_dict[month].count(day)), end=' ')
-            """
-                
+                        day, bday_dict[month].count(day)), end=' ')                
             print()
 
     def tabulate(self, interval, runs=10000):

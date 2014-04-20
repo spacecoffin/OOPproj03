@@ -49,4 +49,5 @@ def writetofile (dictionary, outfile="words.dat"):
 if __name__ == '__main__':
     fNames = input("Enter the file names to build dictionary: ")
     writetofile(buildDictionary (fNames))
+    # alice.txt  carol.txt  gulliver.txt  hyde.txt  treasure.txt  war.txt
 
