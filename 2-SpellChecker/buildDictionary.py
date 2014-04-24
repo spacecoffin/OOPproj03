@@ -29,11 +29,8 @@ def buildDictionary (fNames):
                     if apostrophe_count >= 1:
                         if aword[-1] is "'":
                             aword = aword[:-1]
-                        if aword.replace("'", "") not in dictionary:
-                            dictionary.append(aword)
-                    else:
-                        if aword not in dictionary:
-                            dictionary.append(aword)
+                    if aword not in dictionary:
+                        dictionary.append(aword)
                     wordch = []
                     apostrophe_count = 0
                 else:
