@@ -10,6 +10,7 @@ def buildDictionary (fNames):
         try:
             wordch = []
             apostrophe_count = 0
+            period_flag = False
             while True:
                 char = file.read(1)
                 if not char:               # check if end-of-file
@@ -19,22 +20,36 @@ def buildDictionary (fNames):
                             dictionary.append(aword) 
                     break
                 elif char.isalpha():
-                    wordch.append(char.lower())
+                    wordch.append(char)
                 elif char is "'":
                     if wordch:
                         wordch.append(char)
                         apostrophe_count += 1
-                elif (len(wordch) - apostrophe_count) >= 2:
-                    aword = ''.join(wordch)
-                    if apostrophe_count >= 1:
-                        if aword[-1] is "'":
-                            aword = aword[:-1]
-                    if aword not in dictionary:
-                        dictionary.append(aword)
-                    wordch = []
-                    apostrophe_count = 0
                 else:
-                    wordch = []
+                    if (len(wordch) - apostrophe_count) >= 2:
+                        aword = ''.join(wordch)
+                        if apostrophe_count >= 1:
+                            if aword[-1] is "'":
+                                aword = aword[:-1]
+                        if not aword.replace("'", "").istitle():
+                            if aword.lower() not in dictionary:
+                                dictionary.append(aword.lower())
+                        elif period_flag:
+                            if aword.lower() not in dictionary:
+                                dictionary.append(aword.lower())
+                        wordch = []
+                        apostrophe_count = 0
+                        period_flag = False
+                        if not char.isspace():
+                            if char is '.':        # check for end of sentence
+                                period_flag = True
+                    else:
+                        wordch = []
+                        if not char.isspace():
+                            if char is '.':        # check for end of sentence
+                                period_flag = True
+                            else:
+                                period_flag = False
         finally:
             file.close()
 
