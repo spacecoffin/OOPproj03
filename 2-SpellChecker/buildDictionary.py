@@ -14,28 +14,39 @@ def buildDictionary (fNames):
             while True:
                 char = file.read(1)
                 if not char:               # check if end-of-file
-                    if len(wordch) >=2:
-                        aword = ''.join(wordch)
-                        if aword not in dictionary:
-                            dictionary.append(aword) 
-                    break
-                elif char.isalpha():
-                    wordch.append(char)
-                elif char is "'":
-                    if wordch:
-                        wordch.append(char)
-                        apostrophe_count += 1
-                else:
                     if (len(wordch) - apostrophe_count) >= 2:
                         aword = ''.join(wordch)
                         if apostrophe_count >= 1:
                             if aword[-1] is "'":
-                                aword = aword[:-1]
+                                aword = aword[:-1] # strip trailing apostrophes
                         if not aword.replace("'", "").istitle() or period_flag:
                             if aword.lower() not in dictionary:
                                 dictionary[aword.lower()] = 1
                             elif aword.lower() in dictionary:
                                 dictionary[aword.lower()] += 1
+                    break
+                elif char.isalpha():
+                    wordch.append(char)
+                elif char is "'":
+                    if wordch: # don't begin words with apostrophes
+                        wordch.append(char)
+                        apostrophe_count += 1
+                else:
+                    # don't apostrophes toward length of word
+                    if (len(wordch) - apostrophe_count) >= 2:
+                        aword = ''.join(wordch)
+                        if apostrophe_count >= 1:
+                            if aword[-1] is "'":
+                                aword = aword[:-1] # strip trailing apostrophes
+                                
+                        # don't write capitalized words unless they
+                        # begin a sentence:
+                        if not aword.replace("'", "").istitle() or period_flag:
+                            if aword.lower() not in dictionary:
+                                dictionary[aword.lower()] = 1
+                            elif aword.lower() in dictionary:
+                                dictionary[aword.lower()] += 1
+                                
                         wordch = []
                         apostrophe_count = 0
                         period_flag = False
