@@ -4,7 +4,7 @@ def buildDictionary (fNames):
     Each new word in the file of two or more alphabetic characters is
     included in the dictionary. 
     """
-    dictionary = []
+    dictionary = {}
     for afile in fNames.split():
         file = open(afile, 'r')
         try:
@@ -33,7 +33,9 @@ def buildDictionary (fNames):
                                 aword = aword[:-1]
                         if not aword.replace("'", "").istitle() or period_flag:
                             if aword.lower() not in dictionary:
-                                dictionary.append(aword.lower())
+                                dictionary[aword.lower()] = 1
+                            elif aword.lower() in dictionary:
+                                dictionary[aword.lower()] += 1
                         wordch = []
                         apostrophe_count = 0
                         period_flag = False
@@ -60,9 +62,10 @@ def writetofile (dictionary, outfile="words.dat"):
 
     file = open(outfile, 'w')
     try:
-        dictionary.sort()
+        # dictionary.sort()
         for aword in dictionary:
-            file.write(aword)
+            file.write("{}, ".format(aword))
+            file.write("{}".format(dictionary[aword]))
             file.write('\n')
     finally:
         file.close()
