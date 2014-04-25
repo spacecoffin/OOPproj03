@@ -31,10 +31,7 @@ def buildDictionary (fNames):
                         if apostrophe_count >= 1:
                             if aword[-1] is "'":
                                 aword = aword[:-1]
-                        if not aword.replace("'", "").istitle():
-                            if aword.lower() not in dictionary:
-                                dictionary.append(aword.lower())
-                        elif period_flag:
+                        if not aword.replace("'", "").istitle() or period_flag:
                             if aword.lower() not in dictionary:
                                 dictionary.append(aword.lower())
                         wordch = []
