@@ -3,7 +3,7 @@
 }
 {\colortbl;\red255\green255\blue255;\red255\green118\blue111;\red254\green187\blue100;\red255\green255\blue51;
 \red163\green217\blue121;}
-\margl1440\margr1440\vieww11620\viewh9600\viewkind0
+\margl1440\margr1440\vieww11580\viewh9600\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \f0\fs24 \cf0 --------------------------------------------------------------------------------
@@ -22,9 +22,9 @@
 \f0\b0\fs24 \ulnone \
 \
 
-\fs26 Word definition rule changes:
+\fs26 \strike \strikec0 Word definition rule changes:
 \fs24 \
-\strike \strikec0 	\cb4 1)\cb1  Discard capitalized words that do not start a sentence.\
+\strikec0 	\cb4 1)\cb1  Discard capitalized words that do not start a sentence.\
 		a) 
 \f2\i Such strings should no longer be considered valid words and should 		   not be inserted into the dictionary.\
 		
@@ -38,7 +38,7 @@
 			i) Create a "period flag"\
 				if char == .: set True\
 				set to False after the next loop branch that could write\
-					a word to the dictionary\strike0\striked0 \
+					a word to the dictionary\strikec0 \
 	\cb5 2)\cb1  Figure out a simple and clean scheme to deal with apostrophes.\
 		a) 
 \f2\i "I\'92ll" and "could've" should be considered correctly spelled.
@@ -46,5 +46,33 @@
 		b) 
 \f2\i "ve" and "ll" should be considered incorrect.
 \f0\i0 \
+\strike0\striked0 \
+ord() chr()\
 \
-ord() chr()}
+
+\f1\b\fs28 \ul Two-level dictionary:
+\f0\b0 \ulnone \
+\
+
+\fs24 While checking for spelling errors, the spellCheck program takes each word and \
+first looks for it in the primary dictionary. If the word does not appear in the \
+primary dictionary, it then looks in the secondary dictionary.\
+\
+If the word is not found in either dictionary, spellCheck will flag the word as \
+being misspelled.\
+\
+spellCheck program stores the 500 high frequency words in primary dictionary\
+\
+Primary dictionary hash table\
+	a) Small load factor (1/10)\
+	b) Size is at least 5000.\
+	c) Pick the smallest prime number greater than 5000. 
+\f1\b (5003)
+\f0\b0 \
+\
+Secondary dictionary hash table\
+	a) "Due to memory constraints, we cannot use a hash table with too small a \
+	   load factor."\
+	b) Load factor of about 2 or 3\
+	c) "Use a table whose size is about half or even a third of the number of \
+	   words that you intend to store in the table."}

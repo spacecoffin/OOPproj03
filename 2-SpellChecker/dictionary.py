@@ -1,9 +1,77 @@
 import os
 
+def isPrime(num):
+    if num > 1:
+        if num == 2 or num == 3:
+            return True
+        if num % 2 == 0:
+            return False
+        for i in range(3, num, 2):
+            if num % i == 0:
+                return False
+        return True
+    return False
+
+def nextPrime(num):
+    while True:
+        if isPrime(num):
+            return num
+        num += 1
+
+class HashTableDict:
+    def __init__(self, size=5003):
+        self.list=['']*size
+        self.table_size = size
+        
+    def lookup(self, key):
+        # call self.hash(key) to get index
+        index = self.make_hash(key)
+        # find the correct key at that bucket
+        if isinstance(self.list[index], list):
+            if key in self.list[index]:
+                return key
+            else:
+                raise ValueError('list: value at index dont match {}'.format(key))
+        elif isinstance(self.list[index], str):
+            if key is self.list[index]:
+                return key
+            else:
+                print(self.list[index])
+                raise ValueError('str: value at index dont match {}'.format(key))
+        return self.list[index]
+    
+    def insert(self, key):
+        # call self.hash(key) to get index
+        index = self.make_hash(key)
+        #print('key is {}'.format(key))
+        if self.list[index]:                       # resolve collisions
+            print('collision at {}'.format(index))
+            if isinstance(self.list[index], list):
+                self.list[index].append(key)
+            elif isinstance(self.list[index], str):
+                present_str = self.list[index]
+                self.list[index] = []
+                self.list[index].append(present_str)
+                self.list[index].append(key)
+            print(self.list[index])
+        # insert new key-value pair to that bucket.
+        else:
+            self.list[index] = key
+        
+    def make_hash(self, word):
+        hash_val = 0
+        for char in word:
+            hash_val *= 26
+            hash_val += ord(char) - 97
+            # avoid int overflow by taking mod M at the end of each iteration
+            hash_val = hash_val % self.table_size
+        return hash_val
+
 class Dictionary:
     """
     Maintains the following lists.
-      words: list of dictionary words.
+      primary: list of 500 most frequently occuring words in dictionary.
+      secondary: list of the rest of the dictionary words.
       keepwords: list of words that are not in the dictionary, but the
                  user wants to keep.
       mapper: dictionary with 'key:value' pair such that every
@@ -12,15 +80,43 @@ class Dictionary:
     """
 
     def __init__(self, dic='words.dat'):
-
+        
         #check if the file exists
         assert os.path.exists(dic),\
                'Dictionary \'%s\' does not exist.' % dic 
         file = open(dic, 'r')
-        self.words = [w.rstrip('\n') for w in file.readlines()]
-        self.words.append('a'); self.words.append('i')
+        
+        line_count = 0
+        for line in file:
+            line_count += 1
+        file.seek(0)
+        
+        line_count -= 500
+        line_count //= 2
+        line_count = abs(line_count) # fix so that small words.dat works
+        line_count = nextPrime(line_count)
+            
+        self.primary = HashTableDict(size=5003)
+        self.secondary = HashTableDict(size=line_count)
+        
+        current_line = 0
+        while current_line < 500:
+            word = file.readline()
+            word = word.rstrip('\n')
+            self.primary.insert(word)
+            current_line += 1
+        
+        for word in file:
+            word = word.rstrip('\n')
+            self.secondary.insert(word)
+        #print(self.primary.list)
+        #print(self.secondary.list)
+        #print(line_count)
+            
         self.mapper = {}
         self.keepwords = []
+        self.keepwords.append('a'); self.keepwords.append('i')
+        file.close()
 
     def verify(self, word):
         """
@@ -33,9 +129,17 @@ class Dictionary:
         smallword= word.lower()
         if smallword in self.mapper:
            return self.mapper[smallword]
-        elif smallword in self.keepwords or smallword in self.words:
+        elif smallword in self.keepwords:
             return word
-        else: return None
+        elif self.primary.lookup(smallword):
+            print('{} in PRIMARY'.format(word))
+            return word
+        elif self.secondary.lookup(smallword):
+            print('{} in SECONDARY'.format(word))
+            return word
+        else:
+            print('{} not found'.format(word))
+            return None
 
     def update(self, choice, newword, word):
         """
@@ -45,7 +149,3 @@ class Dictionary:
             self.mapper[word.lower()] = newword
         elif choice in ['n', 'N']:
             self.keepwords.append(newword)
-
-    
-
-
