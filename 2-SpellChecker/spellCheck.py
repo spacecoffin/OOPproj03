@@ -52,6 +52,8 @@ def spellcheckandoutput(text="mytext"):
             if not char:
                 if len(wordch) > 0:
                     word = ''.join(wordch)
+                    if word[-1] is "'":
+                        word = word[:-1] # strip trailing apostrophes
                     newword = dict.verify(word)
                     if newword is None:
                         choice, newword = askuser(word)

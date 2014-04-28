@@ -133,4 +133,4 @@ class Dictionary:
         if choice in ['p', 'P']:
             self.mapper[word.lower()] = newword
         elif choice in ['n', 'N']:
-            self.keepwords.append(newword)
+            self.keepwords.append(newword.lower())
