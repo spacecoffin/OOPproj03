@@ -20,43 +20,29 @@ def nextPrime(num):
 
 class HashTableDict:
     def __init__(self, size=5003):
-        self.list=['']*size
+        self.list=[['']]*size
         self.table_size = size
         
     def lookup(self, key):
         # call self.hash(key) to get index
         index = self.make_hash(key)
         # find the correct key at that bucket
-        if isinstance(self.list[index], list):
-            if key in self.list[index]:
-                return key
-            else:
-                raise ValueError('list: value at index dont match {}'.format(key))
-        elif isinstance(self.list[index], str):
-            if key is self.list[index]:
-                return key
-            else:
-                print(self.list[index])
-                raise ValueError('str: value at index dont match {}'.format(key))
-        return self.list[index]
+        if key in self.list[index]:
+            return key
+        else:
+            return None
     
     def insert(self, key):
         # call self.hash(key) to get index
         index = self.make_hash(key)
-        #print('key is {}'.format(key))
-        if self.list[index]:                       # resolve collisions
-            print('collision at {}'.format(index))
-            if isinstance(self.list[index], list):
-                self.list[index].append(key)
-            elif isinstance(self.list[index], str):
-                present_str = self.list[index]
-                self.list[index] = []
-                self.list[index].append(present_str)
-                self.list[index].append(key)
-            print(self.list[index])
         # insert new key-value pair to that bucket.
+        #print('key is {}'.format(key))
+        if self.list[index][0]:                       # resolve collisions
+            #print('collision at {}'.format(index))
+            self.list[index].append(key)
+            #print(self.list[index])
         else:
-            self.list[index] = key
+            self.list[index][0] = key
         
     def make_hash(self, word):
         hash_val = 0
@@ -70,8 +56,8 @@ class HashTableDict:
 class Dictionary:
     """
     Maintains the following lists.
-      primary: list of 500 most frequently occuring words in dictionary.
-      secondary: list of the rest of the dictionary words.
+      primary: hashTable of 500 most frequently occuring words in dictionary.
+      secondary: hashTable of the rest of the dictionary words.
       keepwords: list of words that are not in the dictionary, but the
                  user wants to keep.
       mapper: dictionary with 'key:value' pair such that every
@@ -90,7 +76,6 @@ class Dictionary:
         for line in file:
             line_count += 1
         file.seek(0)
-        
         line_count -= 500
         line_count //= 2
         line_count = abs(line_count) # fix so that small words.dat works
@@ -126,7 +111,7 @@ class Dictionary:
         returned. 
         """
         
-        smallword= word.lower()
+        smallword = word.lower()
         if smallword in self.mapper:
            return self.mapper[smallword]
         elif smallword in self.keepwords:

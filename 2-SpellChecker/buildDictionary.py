@@ -32,7 +32,7 @@ def buildDictionary (fNames):
                         wordch.append(char)
                         apostrophe_count += 1
                 else:
-                    # don't apostrophes toward length of word
+                    # don't count apostrophes toward length of word
                     if (len(wordch) - apostrophe_count) >= 2:
                         aword = ''.join(wordch)
                         if apostrophe_count >= 1:

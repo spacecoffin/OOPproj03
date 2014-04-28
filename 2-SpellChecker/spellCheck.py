@@ -17,8 +17,10 @@ def askuser(word):
     newword = word
     if choice in  ['R','r','P','p']:
         newword = input ('Replacement word: ')
+        
+        # REPLACEMENT BIT UP HERE
 
-    return (choice,newword)
+    return (choice, newword)
     
 def spellcheckandoutput(text="mytext"):
     """
@@ -44,6 +46,7 @@ def spellcheckandoutput(text="mytext"):
             
     try:
         wordch = []
+        #apostrophe_count = 0
         while True:
             char = infile.read(1)
             if not char:
@@ -53,21 +56,28 @@ def spellcheckandoutput(text="mytext"):
                     if newword is None:
                         choice, newword = askuser(word)
                         outfile.write(newword)
-                        processinput(choice,newword, word)
-                    else: outfile.write(newword)
+                        processinput(choice, newword, word)
+                    else:
+                        outfile.write(newword)
                 break
             elif char.isalpha():
                 wordch.append(char)
+            elif char is "'":
+                if wordch: # don't begin words with apostrophes
+                    wordch.append(char)
+                    #apostrophe_count += 1
             elif len(wordch) == 0:
                 outfile.write(char)
+                # not done this
             else:
                 word = ''.join(wordch)
+                if word[-1] is "'":
+                    word = word[:-1] # strip trailing apostrophes
                 newword = dict.verify(word)
                 if newword is None:
-                    choice,newword = askuser(word)
-                    outfile.write(newword)
-                    outfile.write(char)
-                    processinput(choice,newword,word)
+                    choice, newword = askuser(word)
+                    outfile.write(newword); outfile.write(char)
+                    processinput(choice, newword, word)
                 else:
                     outfile.write(newword); outfile.write(char)
                 wordch = []
