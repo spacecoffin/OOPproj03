@@ -68,9 +68,11 @@ def buildDictionary (fNames):
                 word_with_count.append(dictionary[key])
                 word_with_count.append(key)
                 dict_sort.append(word_with_count)
-            dict_sort.sort(reverse=True)
+            dict_sort.sort()
+            dict_sort.reverse()
 
     return dict_sort
+
 
 def writetofile (dictionary, outfile="words.dat"):
     """
@@ -79,13 +81,14 @@ def writetofile (dictionary, outfile="words.dat"):
 
     file = open(outfile, 'w')
     try:
-        for aword in range(len(dictionary)-1):
+        # dictionary.sort()
+        for aword in range(len(dictionary)):
             file.write(dictionary[aword][1])
             file.write('\n')
-        file.write(dictionary[len(dictionary)-1][1]) # avoid trailing newline
     finally:
         file.close()
 
 if __name__ == '__main__':
     fNames = input("Enter the file names to build dictionary: ")
     writetofile(buildDictionary (fNames))
+

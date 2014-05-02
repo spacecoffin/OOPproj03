@@ -18,33 +18,39 @@ def nextPrime(num):
             return num
         num += 1
 
-class HashTable:
+class HashTableDict:
     def __init__(self, size=5003):
-        self.size = size
-        self.table = [[] for n in range(self.size)]
+        self.list=[['']]*size
+        self.table_size = size
         
-    def lookup(self, item):
+    def lookup(self, key):
         # call self.hash(key) to get index
-        index = self.hash(item)
+        index = self.make_hash(key)
         # find the correct key at that bucket
-        if item in self.table[index]:
-            return item
+        if key in self.list[index]:
+            return key
         else:
             return None
-    # REMEMBER YOU CHANGED LIST TO HASH_LIST, ADD_WORD to ADD_ITEM ETC
-    def add_item(self, item):
+    
+    def insert(self, key):
         # call self.hash(key) to get index
-        index = self.hash(item)
+        index = self.make_hash(key)
         # insert new key-value pair to that bucket.
-        self.table[index].append(item) # resolve collisions
+        #print('key is {}'.format(key))
+        if self.list[index][0]:                       # resolve collisions
+            #print('collision at {}'.format(index))
+            self.list[index].append(key)
+            #print(self.list[index])
+        else:
+            self.list[index][0] = key
         
-    def hash(self, word):
+    def make_hash(self, word):
         hash_val = 0
         for char in word:
             hash_val *= 26
             hash_val += ord(char) - 97
             # avoid int overflow by taking mod M at the end of each iteration
-            hash_val = hash_val % self.size
+            hash_val = hash_val % self.table_size
         return hash_val
 
 class Dictionary:
@@ -69,22 +75,28 @@ class Dictionary:
         line_count = 0
         for line in file:
             line_count += 1
-        line_count = nextPrime(abs((line_count - 500)//2))
         file.seek(0)
+        line_count -= 500
+        line_count //= 2
+        line_count = abs(line_count) # fix so that small words.dat works
+        line_count = nextPrime(line_count)
             
-        self.primary = HashTable(size=5003)
-        self.secondary = HashTable(size=line_count)
+        self.primary = HashTableDict(size=5003)
+        self.secondary = HashTableDict(size=line_count)
         
         current_line = 0
         while current_line < 500:
             word = file.readline()
             word = word.rstrip('\n')
-            self.primary.add_item(word)
+            self.primary.insert(word)
             current_line += 1
         
         for word in file:
             word = word.rstrip('\n')
-            self.secondary.add_item(word)
+            self.secondary.insert(word)
+        print(self.primary.list)
+        #print(self.secondary.list)
+        #print(line_count)
             
         self.mapper = {}
         self.keepwords = []
@@ -122,7 +134,3 @@ class Dictionary:
             self.mapper[word.lower()] = newword
         elif choice in ['n', 'N']:
             self.keepwords.append(newword.lower())
-
-if __name__ == '__main__':
-    testdict = Dictionary()
-    print(testdict.secondary.table)

@@ -1,49 +1,50 @@
 from dictionary import Dictionary
 
+"""
 class SpellChecker:
     def __init__(self):
         self.adict = Dictionary()
     
     def statistics(self):
+        
         self.stats_dict = {}
-        for index in range(self.adict.primary.size):
-            length = len(self.adict.primary.table[index])
+        for index in range(self.adict.primary.table_size):
+            #print('index {}'.format(index))
+            length = len(self.adict.primary.list[index])
+            #print(self.adict.primary.list[index])
+            #print(length)
             count = self.stats_dict.get(length, None)
+            #print(count)
             if count:
                 self.stats_dict[length] += 1
             else:
                 self.stats_dict[length] = 1
-        max_length = max(self.stats_dict.keys())
         
-        print('\nStats on Primary Dictionary', '-'*31, sep='\n')
-        print('Length', ' '*9, 'Number of Lists', sep='')
+        #print(self.stats_dict.items())
         
-        for list_length in range(max_length+1):
-            list_total = self.stats_dict[list_length]
-            print('{}{:<3}{}{:>5}'.format(
-                ' '*3, list_length, ' '*12, list_total))
         
-        self.stats_dict = {}
-        for index in range(self.adict.secondary.size):
-            length = len(self.adict.secondary.table[index])
-            count = self.stats_dict.get(length, None)
-            if count:
-                self.stats_dict[length] += 1
-            else:
-                self.stats_dict[length] = 1
-        max_length = max(self.stats_dict.keys())
+        bday_dict = {}
+        month_list = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
+                      'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        for month in month_list:
+            bday_dict[month] = []
         
-        print('\nStats on Secondary Dictionary', '-'*31, sep='\n')
-        print('Length', ' '*9, 'Number of Lists', sep='')
+        for bday in self.bday_list:
+            bday_dict[bday[0]].append(bday[1])
         
-        for list_length in range(max_length+1):
-            list_total = self.stats_dict[list_length]
-            print('{}{:<3}{}{:>5}'.format(
-                ' '*3, list_length, ' '*12, list_total))
+        for month in month_list:
+            print("{}".format(month.capitalize()), end=' ')
+            
+            for day in range(1, 32):
+                if day in bday_dict[month]:
+                    print("{}({})".format(
+                        day, bday_dict[month].count(day)), end=' ')                
+            print()
+        """
 
 def askuser(word):
     """
-    if the word is not found in the dictionary, user input is
+    if the word is not found in the dictionary, user imput is
     requested
     """
     
