@@ -71,8 +71,8 @@ class SpellChecker:
             if ver is 'y':
                 if self.adict.dict_verify(temp_word):
                     yield temp_word
-                elif ver is 'n':
-                    yield temp_word
+            elif ver is 'n':
+                yield temp_word
     
     def ver_swp(self, word, ver='y'):
     # Swapped consecutive letter function
@@ -81,8 +81,8 @@ class SpellChecker:
             if ver is 'y':
                 if self.adict.dict_verify(temp_word):
                     yield temp_word
-                elif ver is 'n':
-                    yield temp_word
+            elif ver is 'n':
+                yield temp_word
     
     def askuser(self, word):
         """
@@ -99,77 +99,54 @@ class SpellChecker:
             choice = input(query).lower()        
     
         newword = word
+        # YOURE DOING THE TITLECASE THING
         if choice in  ['R','r','P','p']:
             self.suggestion_list = []
                 
             # Missing letter check
             for i in range(len(word)+1):
-                if len(self.suggestion_list) < 10:
-                    for l in range(26):
-                        if len(self.suggestion_list) < 10:
-                            temp_word = word[:i] + chr(l+97) + word[i:]
-                            if self.adict.dict_verify(temp_word)\
-                            and not temp_word in self.suggestion_list:
-                                self.suggestion_list.append(temp_word)
-                                print('MReg: {}'.format(temp_word))
-                        else:
-                            break
-                else:
-                    break
+                for l in range(26):
+                    temp_word = word[:i] + chr(l+97) + word[i:]
+                    if self.adict.dict_verify(temp_word)\
+                    and not temp_word in self.suggestion_list:
+                        self.suggestion_list.append(temp_word)
             
             # Substituted letter check
             for i in range(len(word)):
-                if len(self.suggestion_list) < 10:
-                    for l in range(26):
-                        if len(self.suggestion_list) < 10:
-                            temp_word = word[:i] + chr(l+97) + word[i+1:]
-                            if self.adict.dict_verify(temp_word)\
-                            and not temp_word in self.suggestion_list:
-                                self.suggestion_list.append(temp_word)
-                        else:
-                            break
-                else:
-                    break
+                for l in range(26):
+                    temp_word = word[:i] + chr(l+97) + word[i+1:]
+                    if self.adict.dict_verify(temp_word)\
+                    and not temp_word in self.suggestion_list:
+                        self.suggestion_list.append(temp_word)
                 
             # Extra letter check
             for i in range(len(word)):
-                if len(self.suggestion_list) < 10:
-                    temp_word = word[:i] + word[i+1:]
-                    if self.adict.dict_verify(temp_word) \
-                    and not temp_word in self.suggestion_list:
-                        self.suggestion_list.append(temp_word)
-                else:
-                    break
+                temp_word = word[:i] + word[i+1:]
+                if self.adict.dict_verify(temp_word) \
+                and not temp_word in self.suggestion_list:
+                    self.suggestion_list.append(temp_word)
                 
             # Swapped consecutive letter check
             for i in range(len(word)-1):
-                if len(self.suggestion_list) < 10:
-                    temp_word = word[:i] + word[i+1] + word[i] + word[i+2:]
-                    if self.adict.dict_verify(temp_word) \
-                    and not temp_word in self.suggestion_list:
-                        self.suggestion_list.append(temp_word)
-                else:
-                    break
+                temp_word = word[:i] + word[i+1] + word[i] + word[i+2:]
+                if self.adict.dict_verify(temp_word) \
+                and not temp_word in self.suggestion_list:
+                    self.suggestion_list.append(temp_word)
             
             if len(self.suggestion_list) < 10:
                 for dist1 in self.ver_mis(word, ver='n'):
-                    print('D1M_: {}'.format(dist1))
                     for dist2 in self.ver_mis(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
-                            print('D2MM: {}'.format(dist2))
                     for dist2 in self.ver_sub(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
-                            print('D2MS: {}'.format(dist2))
                     for dist2 in self.ver_ext(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
-                            print('D2ME: {}'.format(dist2))
                     for dist2 in self.ver_swp(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
-                            print('D2MW: {}'.format(dist2))
                 for dist1 in self.ver_sub(word, ver='n'):
                     for dist2 in self.ver_mis(dist1):
                         if not dist2 in self.suggestion_list:
@@ -210,7 +187,8 @@ class SpellChecker:
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
             
-            #self.suggestion_list = self.suggestion_list[:10]
+            # Prune the list to contain exactly 10 words.
+            self.suggestion_list = self.suggestion_list[:10]
             
             for item in range(len(self.suggestion_list)):
                 print('( {} ) {}'.format(item, self.suggestion_list[item]))
@@ -225,7 +203,7 @@ class SpellChecker:
                     newword = self.suggestion_list[replace_choice]
                     break
                 else:
-                    print('Choose option in range 0-{}'.format(
+                    print('Choose an option in the range 0-{}'.format(
                         len(self.suggestion_list)))
             
         return (choice, newword)
