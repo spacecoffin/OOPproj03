@@ -42,39 +42,47 @@ class SpellChecker:
                 ' '*3, list_length, ' '*12, list_total))
         print()
     
-    def ver_mis(self, word):
+    def ver_mis(self, word, ver='y'):
     # Missing letter function
         for i in range(len(word)+1):
             for l in range(26):
                 temp_word = word[:i] + chr(l+97) + word[i:]
-                if self.adict.dict_verify(temp_word):
+                if ver is 'y':
+                    if self.adict.dict_verify(temp_word):
+                        yield temp_word
+                elif ver is 'n':
                     yield temp_word
-        else: return None
     
-    def ver_sub(self, word):
+    def ver_sub(self, word, ver='y'):
     # Substituted letter function
         for i in range(len(word)):
             for l in range(26):
                 temp_word = word[:i] + chr(l+97) + word[i+1:]
-                if self.adict.dict_verify(temp_word):
+                if ver is 'y':
+                    if self.adict.dict_verify(temp_word):
+                        yield temp_word
+                elif ver is 'n':
                     yield temp_word
-        else: return None
     
-    def ver_ext(self, word):
+    def ver_ext(self, word, ver='y'):
     # Extra letter function
         for i in range(len(word)):
             temp_word = word[:i] + word[i+1:]
-            if self.adict.dict_verify(temp_word):
-                yield temp_word
-        else: return None
+            if ver is 'y':
+                if self.adict.dict_verify(temp_word):
+                    yield temp_word
+                elif ver is 'n':
+                    yield temp_word
     
-    def ver_swp(self, word):
+    def ver_swp(self, word, ver='y'):
     # Swapped consecutive letter function
         for i in range(len(word)-1):
             temp_word = word[:i] + word[i+1] + word[i] + word[i+2:]
-            if self.adict.dict_verify(temp_word):
-                yield temp_word
-        else: return None
+            if ver is 'y':
+                if self.adict.dict_verify(temp_word):
+                    yield temp_word
+                elif ver is 'n':
+                    yield temp_word
     
     def askuser(self, word):
         """
@@ -103,6 +111,7 @@ class SpellChecker:
                             if self.adict.dict_verify(temp_word)\
                             and not temp_word in self.suggestion_list:
                                 self.suggestion_list.append(temp_word)
+                                print('MReg: {}'.format(temp_word))
                         else:
                             break
                 else:
@@ -142,8 +151,26 @@ class SpellChecker:
                 else:
                     break
             
-            while len(self.suggestion_list) < 10:
-                for dist1 in self.ver_mis(word):
+            if len(self.suggestion_list) < 10:
+                for dist1 in self.ver_mis(word, ver='n'):
+                    print('D1M_: {}'.format(dist1))
+                    for dist2 in self.ver_mis(dist1):
+                        if not dist2 in self.suggestion_list:
+                            self.suggestion_list.append(dist2)
+                            print('D2MM: {}'.format(dist2))
+                    for dist2 in self.ver_sub(dist1):
+                        if not dist2 in self.suggestion_list:
+                            self.suggestion_list.append(dist2)
+                            print('D2MS: {}'.format(dist2))
+                    for dist2 in self.ver_ext(dist1):
+                        if not dist2 in self.suggestion_list:
+                            self.suggestion_list.append(dist2)
+                            print('D2ME: {}'.format(dist2))
+                    for dist2 in self.ver_swp(dist1):
+                        if not dist2 in self.suggestion_list:
+                            self.suggestion_list.append(dist2)
+                            print('D2MW: {}'.format(dist2))
+                for dist1 in self.ver_sub(word, ver='n'):
                     for dist2 in self.ver_mis(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
@@ -156,7 +183,7 @@ class SpellChecker:
                     for dist2 in self.ver_swp(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
-                for dist1 in self.ver_sub(word):
+                for dist1 in self.ver_ext(word, ver='n'):
                     for dist2 in self.ver_mis(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
@@ -169,7 +196,7 @@ class SpellChecker:
                     for dist2 in self.ver_swp(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
-                for dist1 in self.ver_ext(word):
+                for dist1 in self.ver_swp(word, ver='n'):
                     for dist2 in self.ver_mis(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
@@ -182,22 +209,8 @@ class SpellChecker:
                     for dist2 in self.ver_swp(dist1):
                         if not dist2 in self.suggestion_list:
                             self.suggestion_list.append(dist2)
-                for dist1 in self.ver_swp(word):
-                    for dist2 in self.ver_mis(dist1):
-                        if not dist2 in self.suggestion_list:
-                            self.suggestion_list.append(dist2)
-                    for dist2 in self.ver_sub(dist1):
-                        if not dist2 in self.suggestion_list:
-                            self.suggestion_list.append(dist2)
-                    for dist2 in self.ver_ext(dist1):
-                        if not dist2 in self.suggestion_list:
-                            self.suggestion_list.append(dist2)
-                    for dist2 in self.ver_swp(dist1):
-                        if not dist2 in self.suggestion_list:
-                            self.suggestion_list.append(dist2)
-                break
             
-            self.suggestion_list = self.suggestion_list[:10]
+            #self.suggestion_list = self.suggestion_list[:10]
             
             for item in range(len(self.suggestion_list)):
                 print('( {} ) {}'.format(item, self.suggestion_list[item]))
