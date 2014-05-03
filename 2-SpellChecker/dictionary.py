@@ -42,7 +42,8 @@ class HashTable:
         hash_val = 0
         for char in word:
             hash_val *= 26
-            hash_val += ord(char) - 97
+            if not char is "'":
+                hash_val += ord(char) - 97
             # avoid int overflow by taking mod M at the end of each iteration
             hash_val = hash_val % self.size
         return hash_val
@@ -101,18 +102,25 @@ class Dictionary:
         
         smallword = word.lower()
         if smallword in self.mapper:
-           return self.mapper[smallword]
+            return self.mapper[smallword]
         elif smallword in self.keepwords:
             return word
         elif self.primary.lookup(smallword):
-            print('{} in PRIMARY'.format(word))
+            #print('{} in PRIMARY'.format(word))
             return word
         elif self.secondary.lookup(smallword):
-            print('{} in SECONDARY'.format(word))
+            #print('{} in SECONDARY'.format(word))
             return word
         else:
-            print('{} not found'.format(word))
+            #print('{} not found'.format(word))
             return None
+    
+    def dict_verify(self, word):
+        smallword = word.lower()
+        if self.primary.lookup(smallword):
+            return word
+        elif self.secondary.lookup(smallword):
+            return word
 
     def update(self, choice, newword, word):
         """
