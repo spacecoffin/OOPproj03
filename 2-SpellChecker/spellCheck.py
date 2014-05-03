@@ -99,7 +99,11 @@ class SpellChecker:
             choice = input(query).lower()        
     
         newword = word
-        # YOURE DOING THE TITLECASE THING
+        if word.istitle():
+            title_flag = True
+        else:
+            title_flag = False
+            
         if choice in  ['R','r','P','p']:
             self.suggestion_list = []
                 
@@ -189,6 +193,11 @@ class SpellChecker:
             
             # Prune the list to contain exactly 10 words.
             self.suggestion_list = self.suggestion_list[:10]
+            if title_flag:
+                index = 0
+                for item in self.suggestion_list:
+                    self.suggestion_list[index] = item.title()
+                    index += 1
             
             for item in range(len(self.suggestion_list)):
                 print('( {} ) {}'.format(item, self.suggestion_list[item]))
@@ -231,7 +240,6 @@ class SpellChecker:
                 
         try:
             wordch = []
-            #apostrophe_count = 0
             while True:
                 char = infile.read(1)
                 if not char:
@@ -252,7 +260,6 @@ class SpellChecker:
                 elif char is "'":
                     if wordch: # don't begin words with apostrophes
                         wordch.append(char)
-                        #apostrophe_count += 1
                 elif len(wordch) == 0:
                     outfile.write(char)
                     # not done this
