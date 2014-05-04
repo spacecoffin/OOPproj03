@@ -99,10 +99,6 @@ class SpellChecker:
             choice = input(query).lower()        
     
         newword = word
-        if word.istitle():
-            title_flag = True
-        else:
-            title_flag = False
             
         if choice in  ['R','r','P','p']:
             self.suggestion_list = []
@@ -137,6 +133,7 @@ class SpellChecker:
                 and not temp_word in self.suggestion_list:
                     self.suggestion_list.append(temp_word)
             
+            # Iterate through creation of distance 2 suggestions
             if len(self.suggestion_list) < 10:
                 for dist1 in self.ver_mis(word, ver='n'):
                     for dist2 in self.ver_mis(dist1):
@@ -193,7 +190,7 @@ class SpellChecker:
             
             # Prune the list to contain exactly 10 words.
             self.suggestion_list = self.suggestion_list[:10]
-            if title_flag:
+            if word.istitle():
                 index = 0
                 for item in self.suggestion_list:
                     self.suggestion_list[index] = item.title()
@@ -262,7 +259,6 @@ class SpellChecker:
                         wordch.append(char)
                 elif len(wordch) == 0:
                     outfile.write(char)
-                    # not done this
                 else:
                     word = ''.join(wordch)
                     if word[-1] is "'":
